@@ -6,7 +6,7 @@
     "lib": ["es6"],                                   
     "allowJs": true,                             
     "outDir": "./dist",                              
-    // "rootDir": "./src",                             
+    "rootDir": "./src",                             
     "removeComments": true,                      
 
     "typeRoots": [
@@ -27,8 +27,7 @@
       "@models/*":["./src/models/*"],
       "@config/*":["./src/config/*"]
     },
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "emitDecoratorMetadata": true
     
   }
 }

@@ -1,3 +1,5 @@
+contas/.rabbitmq_data
+
 # Logs
 logs
 *.log

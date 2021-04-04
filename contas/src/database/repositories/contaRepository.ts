@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import  Conta  from "../../entities/conta";
-import { IConta } from "../../models/IConta"
+import  IConta  from "../../models/IConta"
 
 export const criarConta = async (payload: IConta): Promise<Conta> => {
   const contaRepository = getRepository(Conta);
@@ -31,5 +31,10 @@ export const bloquearConta = async (id: number): Promise<Conta | null> => {
   if (!conta) return null;
   conta.flagAtivo = false;
   return contaRepository.save(conta);
+};
+
+export const obterTodas = async (): Promise<Array<Conta>> => {
+  const conta = getRepository(Conta);
+  return conta.find();
 };
 

@@ -12,7 +12,9 @@ class ContasController extends AppController {
    * return a account list
    */
   public async index( req: Request, res: Response) {
-    return res.send(obterTodas())
+    const all = await obterTodas()
+    
+    return res.send(all)
   }
 
   /**
@@ -20,7 +22,9 @@ class ContasController extends AppController {
    * return a account list
    */
   public async saldo( req: Request, res: Response) {
-    return res.send(obterSaldo(Number.parseInt(req.params.id)))
+    const saldo = await obterSaldo(Number.parseInt(req.params.id))
+    
+    return res.send(saldo)
   }
 
   /**

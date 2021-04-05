@@ -5,7 +5,7 @@ import  IConta  from "../../models/IConta"
 export const criarConta = async (payload: IConta): Promise<Conta> => {
   const contaRepository = getRepository(Conta);
   const conta = new Conta();
-  return contaRepository.save({
+  return await contaRepository.save({
     ...conta,
     ...payload,
   });
@@ -33,8 +33,11 @@ export const bloquearConta = async (id: number): Promise<Conta | null> => {
   return contaRepository.save(conta);
 };
 
-export const obterTodas = async (): Promise<Array<Conta>> => {
+export const obterTodas = async (): Promise<any> => {
   const conta = getRepository(Conta);
-  return conta.find();
+  const all = await conta.find();
+  // console.log(all);
+  return all
+  
 };
 

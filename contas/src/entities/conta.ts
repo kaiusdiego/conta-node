@@ -1,4 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
+
 @Entity()
 export default class Conta {
 

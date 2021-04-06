@@ -14,22 +14,27 @@ export class Conta1617580054954 implements MigrationInterface {
                 {
                     name: "idPessoa",
                     type: "int",
+                    isUnique: true
                 },
                 {
                     name: "saldo",
                     type: "decimal",
+                    precision: 17,
+                    scale: 2
                 },
                 {
                     name: "limiteSaqueDiario",
                     type: "decimal",
+                    precision: 17,
+                    scale: 2
                 },
                 {
                     name: "flagAtivo",
-                    type: "decimal",
+                    type: "decimal"
                 },
                 {
                     name: "tipoConta",
-                    type: "decimal",
+                    type: "decimal"
                 },
                 {
                     name: "dataCriacao",

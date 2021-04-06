@@ -1,33 +1,38 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
 
 @Entity()
 export default class Conta {
 
     @PrimaryGeneratedColumn("increment")
-    idConta: number;
+    idConta: number
 
-    @Column("bigint")
-    idPessoa: number;
+    @Column({
+        type: "bigint",
+        unique: true
+    })
+    idPessoa: number
 
     @Column({
         type: "decimal",
-        precision: 2
+        precision: 17,
+        scale: 2
     })
-    saldo: number;
+    saldo: number
 
     @Column({
         type: "decimal",
-        precision: 2
+        precision: 17,
+        scale: 2
     })
-    limiteSaqueDiario: number;
+    limiteSaqueDiario: number
 
     @Column("boolean")
-    flagAtivo: boolean;
+    flagAtivo: boolean
 
     @Column("int")
-    tipoConta: number;
+    tipoConta: number
     
     @CreateDateColumn({ name: 'dataCriacao', type: 'timestamp with time zone' })
-    dataCriacao: Date;
+    dataCriacao: Date
 
 }

@@ -93,7 +93,7 @@ class ContasController  {
       const conta =  await sacarValor(idConta,valor)
       const msgSent = await server.rKeyPublish('contas','saque.transacao',
       JSON.stringify({idConta,valor, dataTransacao: ''}))
-      return res.json({data:conta})
+      return res.json({data:conta, msgSent})
     } catch (error) {
       return res.json(`Não foi possível sacar valor. ${error}`)
     }

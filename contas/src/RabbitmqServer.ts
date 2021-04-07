@@ -60,18 +60,6 @@ export default class RabbitmqServer {
         return RabbitmqServer.conn.close()
     }
 
-    async configureAndDeclare(exchange: string, queue: string, rkey: string): Promise<void> {
-        this.exchange = exchange
-        this.queue = queue
-        this.rkey = rkey
-        await this.declareExchange(exchange).then(
-            await this.declareQueue.bind(null,queue)
-        )
-        await this.bindQueueExchange.bind(null,queue, exchange, rkey)
-    }
 
-    async getConnection(): Promise<Connection>{
-        return RabbitmqServer.conn;
-    }
 
 }

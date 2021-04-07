@@ -4,13 +4,12 @@ import "reflect-metadata";
 import { createConnection } from "typeorm"
 import dbConfig from './database/index'
 
-
 config({path:__dirname+'/./../../.env'});
 
 createConnection(dbConfig)
   .then((_connection) => {
-    app.listen(process.env.APPCONTAS_PORT, () => {
-      console.log("API Contas rodando na porta:", process.env.APPCONTAS_PORT);
+    app.listen(process.env.APPTRANSACAO_PORT, () => {
+      console.log("API Transações rodando na porta:", process.env.APPTRANSACAO_PORT);
     });
   })
   .catch((err) => {

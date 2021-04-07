@@ -2,21 +2,17 @@ import { Connection, Channel, connect, Message } from "amqplib";
 import { config } from "dotenv"; 
 config({path:__dirname+'/./../../../.env'});
 
-
 export default class RabbitmqServer {
 
     private static conn: Connection
     private static channel: Channel = null
-    private exchange: string;
-    private queue: string;
-    private rkey: string;
 
     constructor(private uri: string = process.env.RABBITMQ_URI) { 
     }
 
     public async init(): Promise<Channel> {
         if (RabbitmqServer.conn == null) {
-            RabbitmqServer.conn = await connect(process.env.RABBITMQ_URI)
+            RabbitmqServer.conn = await connect(this.uri)
         }
         if (RabbitmqServer.channel == null) {
             return RabbitmqServer.channel = await RabbitmqServer.conn.createChannel()
@@ -45,10 +41,6 @@ export default class RabbitmqServer {
         return RabbitmqServer.channel.publish(exchange, rkey, Buffer.from(msg))
     }
 
-    async rKeyPublishQuick(msg: string) {
-        return RabbitmqServer.channel.publish(this.queue, this.rkey, Buffer.from(msg))
-    }
-
     async consume(queue: string, callback: (msg: Message) => void) {
         return RabbitmqServer.channel.consume(queue, (msg) => {
             callback(msg)
@@ -59,7 +51,5 @@ export default class RabbitmqServer {
     async closeConnection() {
         return RabbitmqServer.conn.close()
     }
-
-
 
 }

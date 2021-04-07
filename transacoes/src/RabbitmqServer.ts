@@ -1,11 +1,14 @@
 import { Connection, Channel, connect, Message } from "amqplib";
+import { config } from "dotenv"; 
+config({path:__dirname+'/./../../../.env'});
+
 
 export default class RabbitmqServer {
 
     private static conn: Connection = null
     private static channel: Channel = null
 
-    constructor(private uri: string) { }
+    constructor(private uri: string = process.env.RABBITMQ_URI) { }
 
     async init(): Promise<void> {
         if (RabbitmqServer.conn == null) {

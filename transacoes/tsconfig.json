@@ -3,10 +3,9 @@
 
     "target": "es2017",                                
     "module": "commonjs",                           
-    "lib": ["es6"],                                   
-    "allowJs": true,                             
+    "lib": ["es6"],                              
     "outDir": "./dist",                              
-    // "rootDir": "./src",                             
+    "rootDir": ".",                             
     "removeComments": true,                      
 
     "typeRoots": [
@@ -26,6 +25,7 @@
       "@controllers/*":["./src/controllers/*"],
       "@models/*":["./src/models/*"],
       "@config/*":["./src/config/*"]
-    }
+    },
+    "emitDecoratorMetadata": true
   }
 }

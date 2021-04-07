@@ -3,7 +3,6 @@ import  IConta  from "../models/IConta"
 import { config } from "dotenv"; 
 import { criarConta, obterSaldo, bloquearConta, obterTodas, depositarValor, sacarValor } from "../database/repositories/contaRepository";
 import RabbitmqServer from 'src/RabbitmqServer';
-config({path:__dirname+'/./../../../.env'});
 
 class ContasController  {
 

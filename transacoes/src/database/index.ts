@@ -3,11 +3,11 @@ import Transacao from "../entities/transacao";
 
 const dbConfig: ConnectionOptions = {
   type: "postgres",
-  host: process.env.POSTGRES_HOST || "localhost",
-  port: Number(process.env.POSTGRES_PORT) || 5432,
-  username: process.env.POSTGRES_USER || "postgres",
-  password: process.env.POSTGRES_PASSWORD || "admin",
-  database: process.env.POSTGRES_DB || "postgres",
+  host: process.env.TRANSACOES_DB_HOST || "localhost",
+  port: Number(process.env.TRANSACOES_DB_PORT) || 5432,
+  username: process.env.TRANSACOES_DB_USER || "postgres",
+  password: process.env.TRANSACOES_DB_PASS || "admin",
+  database: process.env.TRANSACOES_DB_NAME || "postgres",
   entities: [ Transacao ],
   synchronize: true,
 };

@@ -69,7 +69,7 @@ class ContasController  {
       const idConta = Number.parseInt(req.params?.id)
       const conta =  await depositarValor(idConta,valor)
       const msgSent = await server.rKeyPublish('contas','deposito.transacao',
-      JSON.stringify({idConta,valor, dataTransacao: ''}))
+      JSON.stringify({idConta,valor, dataTransacao: new Date()}))
       return res.json({data:conta, msgSent})
     } catch (error) {
       return res.json(`Não foi possível depositar valor. ${error}`)
@@ -91,7 +91,7 @@ class ContasController  {
       const idConta = Number.parseInt(req.params?.id)
       const conta =  await sacarValor(idConta,valor)
       const msgSent = await server.rKeyPublish('contas','saque.transacao',
-      JSON.stringify({idConta,valor, dataTransacao: ''}))
+      JSON.stringify({idConta,valor, dataTransacao: new Date()}))
       return res.json({data:conta, msgSent})
     } catch (error) {
       return res.json(`Não foi possível sacar valor. ${error}`)

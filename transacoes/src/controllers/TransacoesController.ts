@@ -12,8 +12,10 @@ class TransacoesController {
   public async index( req: Request, res: Response) {
     try {
       const idConta = req.query.idconta
-      const dtInicio = req.query.dtInicio
-      const dtFim = req.query.dtFim
+      const dtInicio = req.query.dtinicio
+      const dtFim = req.query.dtfim
+      console.log('inputs',idConta,dtInicio,dtFim);
+      
       let transacoes
       if( dtInicio !== null && dtFim !== null){
         transacoes = await obterTransacoes(idConta,dtInicio,dtFim)

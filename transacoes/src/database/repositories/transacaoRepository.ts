@@ -26,7 +26,7 @@ export const sacarValor = async (payload: ITransacao): Promise<Transacao | null>
 export const obterTransacoes = async (id: any, dtInicio?: any, dtFim?: any): 
 Promise<Array<Transacao> | null> => {
   const transacaoRepository = getRepository(Transacao)
-  if (dtInicio !== null && dtFim !== null) {
+  if (dtInicio !== undefined && dtFim !== undefined) {
     return await transacaoRepository.find({idConta: id, dataTransacao: Between(dtInicio,dtFim)})
   }
   return await transacaoRepository.find({ idConta: id})

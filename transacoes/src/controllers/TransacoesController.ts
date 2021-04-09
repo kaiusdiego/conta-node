@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { obterTransacoes } from 'src/database/repositories/transacaoRepository'
+import { obterTransacoes } from '../database/repositories/transacaoRepository'
 
 class TransacoesController {
 
@@ -14,7 +14,6 @@ class TransacoesController {
       const idConta = req.query.idConta
       const dtInicio = req.query.dtInicio
       const dtFim = req.query.dtFim
-      console.log('inputs',idConta,dtInicio,dtFim);
       
       let transacoes
       if( dtInicio !== null && dtFim !== null){

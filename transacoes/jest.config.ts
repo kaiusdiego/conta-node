@@ -1,5 +1,5 @@
 import { compilerOptions } from './tsconfig.json';
-import { pathsToModuleNameMapper } from 'ts-jest';
+import { pathsToModuleNameMapper } from 'ts-jest/utils';
 
 
 /*
@@ -21,13 +21,16 @@ export default {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  // collectCoverage: false,
+  collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  // collectCoverageFrom: [
+  //   'src/controllers/**/*.js',
+  //   'src/models/**/*.js',
+  // ],
 
   // The directory where Jest should output its coverage files
-  // coverageDirectory: undefined,
+  // coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -39,10 +42,8 @@ export default {
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
-  //   "json",
   //   "text",
-  //   "lcov",
-  //   "clover"
+  //   "lcov"
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
@@ -71,17 +72,18 @@ export default {
 
   // An array of directory names to be searched recursively up from the requiring module's location
   // moduleDirectories: [
-  //   "node_modules"
+  //   "node_modules",
+  //   'src'
   // ],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
   //   "js",
-  //   "json",
-  //   "jsx",
-  //   "ts",
-  //   "tsx",
-  //   "node"
+  //   "json"
+  //   // "jsx",
+  //   // "ts",
+  //   // "tsx",
+  //   // "node"
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
@@ -151,7 +153,7 @@ export default {
 
   // The glob patterns Jest uses to detect test files
   // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
+  //   "**/tests/**/*.[jt]s?(x)",
   //   "**/?(*.)+(spec|test).[tj]s?(x)"
   // ],
 
@@ -176,8 +178,9 @@ export default {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
-
+  // transform: {
+  //   ".(js|jsx|ts|tsx)": "@sucrase/jest-plugin"
+  // },
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
   //   "\\\\node_modules\\\\",

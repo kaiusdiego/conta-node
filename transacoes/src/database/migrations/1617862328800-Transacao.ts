@@ -32,6 +32,7 @@ export class Transacao1617862328800 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        return queryRunner.dropTable('transacoes')
     }
 
 }

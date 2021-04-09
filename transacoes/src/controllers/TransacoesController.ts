@@ -11,9 +11,9 @@ class TransacoesController {
    */
   public async index( req: Request, res: Response) {
     try {
-      const idConta = req.query.idconta
-      const dtInicio = req.query.dtinicio
-      const dtFim = req.query.dtfim
+      const idConta = req.query.idConta
+      const dtInicio = req.query.dtInicio
+      const dtFim = req.query.dtFim
       console.log('inputs',idConta,dtInicio,dtFim);
       
       let transacoes
@@ -22,9 +22,17 @@ class TransacoesController {
       } else {
         transacoes = await obterTransacoes(idConta)
       }
+      if(transacoes.length == 0){
+        throw new Error("Não existem movimentações nesta conta.");
+      }
       return res.json(transacoes)
     } catch (error) {
-      return res.json(`Não foi possível obter transações da conta. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 404,
+        error: "Not found"
+      }
+      return res.status(404).json(result)
     }
   }
 

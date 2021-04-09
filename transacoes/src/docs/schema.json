@@ -1,0 +1,134 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "version": "1.0.0",
+      "title": "API Transações",
+      "description": "API que consome operações de depósito e saque da API de contas e também disponibiliza transações de uma conta por IdConta e/ou período",
+      "termsOfService": "http://api_url/terms/",
+      "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "paths": {
+      "/transacoes/": {
+        "get": {
+          "description": "Retorna a lista de transações de uma conta de acordo com o idConta e/ou período.",
+          "operationId": "obterTransacoes",
+          "parameters": [
+            {
+              "name": "idConta",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/idConta"
+              },
+              "required": true
+            },
+            {
+              "name": "dtInicio",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/dtInicio"
+              },
+              "required": false
+            },
+            {
+              "name": "dtFim",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/dtFim"
+              },
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Informação de movimentação",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TransacaoResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Não encontrada!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Transação não encontrada",
+                    "code": "404",
+                    "error": "Não encontrada"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
+    },
+    "components": {
+      "schemas": {
+        "idConta": {
+          "type": "number",
+          "example": "1"
+        },
+        "dtInicio": {
+          "type": "string",
+          "example": "2021-04-05"
+        },
+        "dtFim": {
+          "type": "string",
+          "example": "2021-04-06"
+        },
+        "TransacaoResponse": {
+            "type":"array",
+            "items": {
+              "type":"object",
+              "properties": {
+                "idTransacao": {
+                  "type": "number",
+                  "example": "1"
+                },
+                "idConta": {
+                  "type": "number",
+                  "example": "1"
+                },
+                "valor": {
+                  "type": "number",
+                  "example": "5000.00"
+                },
+                "dataTransacao": {
+                    "type": "string",
+                    "example": "2021-04-08T20:25:04.341Z"
+                }
+              }
+            }
+          },       
+        "Error": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "code": {
+              "type": "number"
+            },
+            "error": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "documentation": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,0 +1,358 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "version": "1.0.0",
+      "title": "API Contas",
+      "description": "API que realiza operações de depósito e saque e as publica no RabbitMQ. Também disponibiliza criação, bloqueio e consulta de saldo em conta.",
+      "termsOfService": "http://api_url/terms/",
+      "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "paths": {
+      "/contas": {
+        "post": {
+          "description": "Cria uma nova conta",
+          "operationId": "criarConta",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conta"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Conta criada com sucesso!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ContaResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Erro ao criar conta.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Não foi possível criar a conta",
+                    "code": "400",
+                    "error": "Bad Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/contas/{idConta}/deposito": {
+        "put": {
+          "description": "Realiza depósito na conta informada através dos parâmetros idConta e valor.",
+          "operationId": "realizaDepósito",
+          "parameters": [
+            {
+              "name": "idConta",
+              "in": "path",
+              "schema": {
+                "$ref": "#/components/schemas/idConta"
+              },
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/valor"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "204": {
+              "description": "Depósito realizado com sucesso!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ContaResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Erro ao realizar depósito.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Não foi possível realizar depósito",
+                    "code": "400",
+                    "error": "Bad Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/contas/{idConta}/saldo": {
+        "get": {
+          "description": "Retorna o valor do saldo em conta de acordo com o idConta.",
+          "operationId": "obterSaldo",
+          "parameters": [
+            {
+              "name": "idConta",
+              "in": "path",
+              "schema": {
+                "$ref": "#/components/schemas/idConta"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Informa o saldo em conta",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/saldo"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Não encontrada!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Conta não encontrada",
+                    "code": "404",
+                    "error": "Não encontrada"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/contas/{idConta}/saque": {
+        "put": {
+          "description": "Realiza saque na conta informada através dos parâmetros idConta e valor.",
+          "operationId": "realizaSaque",
+          "parameters": [
+            {
+              "name": "idConta",
+              "in": "path",
+              "schema": {
+                "$ref": "#/components/schemas/idConta"
+              },
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/valor"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "204": {
+              "description": "Saque realizado com sucesso!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ContaResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Erro ao realizar saque.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Não foi possível realizar saque",
+                    "code": "400",
+                    "error": "Bad Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/contas/{idConta}/bloqueio": {
+        "patch": {
+          "description": "Bloqueia uma conta de acordo com o idConta.",
+          "operationId": "realizarBloqueio",
+          "parameters": [
+            {
+              "name": "idConta",
+              "in": "path",
+              "schema": {
+                "$ref": "#/components/schemas/idConta"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Conta bloqueada com sucesso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ContaResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Não encontrada!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Conta não encontrada",
+                    "code": "404",
+                    "error": "Não encontrada"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
+    },
+    "components": {
+      "schemas": {
+        "idConta": {
+          "type": "number",
+          "example": "1"
+        },
+        "idPessoa": {
+          "type": "number",
+          "example": "1"
+        },
+        "saldo": {
+          "type": "number",
+          "example": "9500.50"
+        },
+        "limiteSaqueDiario": {
+          "type": "number",
+          "example": "1000.00"
+        },
+        "flagAtivo": {
+          "type": "boolean",
+          "example": true
+        },
+        "tipoConta": {
+          "type": "number",
+          "example": "2"
+        },
+        "dataCriacao": {
+          "type": "string",
+          "example": "2021-04-08T16:45:12.733Z"
+        },
+        "valor": {
+          "type": "object",
+          "properties": {
+            "valor":{
+              "type": "number",
+              "example": "1700.85"
+            }
+          }
+        },
+        "ContaResponse": {
+          "type": "object",
+          "properties": {
+            "idConta": {
+              "$ref": "#/components/schemas/idConta"
+            },
+            "idPessoa": {
+              "$ref": "#/components/schemas/idPessoa"
+            },
+            "saldo": {
+              "$ref": "#/components/schemas/saldo"
+            },
+            "limiteSaqueDiario": {
+              "$ref": "#/components/schemas/limiteSaqueDiario"
+            },
+            "flagAtivo": {
+              "$ref": "#/components/schemas/flagAtivo"
+            },
+            "tipoConta": {
+              "$ref": "#/components/schemas/tipoConta"
+            },
+            "dataCriacao": {
+              "$ref": "#/components/schemas/dataCriacao"
+            }
+          }
+        },
+        "Conta": {
+          "type": "object",
+          "properties": {
+            "idPessoa": {
+              "$ref": "#/components/schemas/idPessoa"
+            },
+            "saldo": {
+              "$ref": "#/components/schemas/saldo"
+            },
+            "limiteSaqueDiario": {
+              "$ref": "#/components/schemas/limiteSaqueDiario"
+            },
+            "flagAtivo": {
+              "$ref": "#/components/schemas/flagAtivo"
+            },
+            "tipoConta": {
+              "$ref": "#/components/schemas/tipoConta"
+            }
+          },
+          "required": ["idPessoa", "saldo", "flagAtivo", "tipoConta"]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "code": {
+              "type": "number"
+            },
+            "error": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "documentation": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }

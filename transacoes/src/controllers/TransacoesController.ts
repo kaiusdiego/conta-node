@@ -30,7 +30,7 @@ class TransacoesController {
       let result = {
         message: error.toString(),
         code: 404,
-        error: "Not found"
+        error: "Não encontrada"
       }
       return res.status(404).json(result)
     }

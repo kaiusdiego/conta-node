@@ -16,10 +16,13 @@ class ContasController  {
       const all = await obterTodas()
       return res.json(all)
     } catch (error) {
-      return res.json(`Não foi possível listar contas. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 404,
+        error: "Não encontrada"
+      }
+      return res.status(404).json(result)
     }
-    
-
   }
 
   /**
@@ -31,15 +34,13 @@ class ContasController  {
       const saldo = await obterSaldo(Number.parseInt(req.params.id))
       return res.json(saldo)
     } catch (error) {
-      return res.json(`Não foi possível obter saldo da conta. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 404,
+        error: "Não encontrada"
+      }
+      return res.status(404).json(result)
     }
-  }
-
-  /**
-   * get
-   */
-  public async get() {
-    
   }
 
   /**
@@ -48,9 +49,14 @@ class ContasController  {
   public async criar(req: Request, res: Response ) {
     try {
       const conta =  await criarConta(<IConta>req.body)
-      return res.json(conta)
+      return res.status(201).json(conta)
     } catch (error) {
-      return res.json(`Não foi possível criar a conta. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 400,
+        error: "Não foi possível criar a conta."
+      }
+      return res.status(400).json(result)
     }
   }
 
@@ -68,11 +74,16 @@ class ContasController  {
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
       const conta =  await depositarValor(idConta,valor)
-      const msgSent = await server.rKeyPublish('contas','deposito.transacao',
+      await server.rKeyPublish('contas','deposito.transacao',
       JSON.stringify({idConta,valor, dataTransacao: new Date()}))
-      return res.json({data:conta, msgSent})
+      return res.status(204).json(conta)
     } catch (error) {
-      return res.json(`Não foi possível depositar valor. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 400,
+        error: "Não foi possível depositar valor."
+      }
+      return res.status(400).json(result)
     }
   }
 
@@ -90,11 +101,16 @@ class ContasController  {
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
       const conta =  await sacarValor(idConta,valor)
-      const msgSent = await server.rKeyPublish('contas','saque.transacao',
+      await server.rKeyPublish('contas','saque.transacao',
       JSON.stringify({idConta,valor, dataTransacao: new Date()}))
-      return res.json({data:conta, msgSent})
+      return res.json(conta)
     } catch (error) {
-      return res.json(`Não foi possível sacar valor. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 400,
+        error: "Não foi possível sacar valor."
+      }
+      return res.status(400).json(result)
     }
   }
 
@@ -105,11 +121,16 @@ class ContasController  {
     try {
       const conta =  await bloquearConta(Number.parseInt(req.params?.id))
       if( conta === null)
-        return res.send(`Conta já estava bloqueada.`)
+        throw new Error();
       return res.send(conta)
     } catch (error) {
-      return res.send(`Não foi possível bloquear a conta. Verifique
-      se ela já não está bloqueada. ${error}`)
+      let result = {
+        message: error.toString(),
+        code: 400,
+        error: `Não foi possível bloquear a conta. Verifique
+        se ela já não está bloqueada.`
+      }
+      return res.status(400).json(result)
     }
   }
 

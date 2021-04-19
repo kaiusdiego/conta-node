@@ -1,5 +1,5 @@
 .rabbitmq_data
-
+.postgres-data
 # Logs
 logs
 *.log

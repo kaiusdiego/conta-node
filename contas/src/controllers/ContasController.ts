@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import request from "supertest";
 import  IConta  from "../models/IConta"
 import { config } from "dotenv"; 
 import { criarConta, obterSaldo, bloquearConta, obterTodas, depositarValor, sacarValor } from "../database/repositories/contaRepository";
@@ -32,7 +33,7 @@ class ContasController  {
   public async obterSaldo( req: Request, res: Response) {
     try {
       const saldo = await obterSaldo(Number.parseInt(req.params.id))
-      return res.json(saldo)
+      return res.json({saldo})
     } catch (error) {
       let result = {
         message: error.toString(),
@@ -100,6 +101,10 @@ class ContasController  {
 
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
+      const saldo = await obterSaldo(idConta)
+      if (valor > saldo) {
+        throw new Error('Saldo insuficiente.');
+      }
       const conta =  await sacarValor(idConta,valor)
       await server.rKeyPublish('contas','saque.transacao',
       JSON.stringify({idConta,valor, dataTransacao: new Date()}))

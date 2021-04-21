@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build": "npx babel ./src --extensions \".mjs,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
@@ -35,6 +36,7 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.13.15",
     "@types/amqplib": "^0.5.17",
     "amqplib": "^0.7.1",
     "cors": "^2.8.5",

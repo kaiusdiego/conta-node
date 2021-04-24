@@ -77,7 +77,7 @@ class ContasController  {
       const conta =  await depositarValor(idConta,valor)
       await server.rKeyPublish('contas','deposito.transacao',
       JSON.stringify({idConta,valor, dataTransacao: new Date()}))
-      return res.status(204).json(conta)
+      return res.json(conta)
     } catch (error) {
       let result = {
         message: error.toString(),

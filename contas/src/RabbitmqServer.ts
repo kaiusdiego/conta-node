@@ -7,8 +7,9 @@ export default class RabbitmqServer {
     private static conn: Connection
     private static channel: Channel = null
 
-    constructor(private uri: string = process.env.RABBITMQ_URI) { 
-    }
+    constructor(private uri: string = 
+        `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@rabbitmq`
+    ) {}
 
     public async init(): Promise<Channel> {
         if (RabbitmqServer.conn == null) {

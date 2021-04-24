@@ -6,6 +6,8 @@ services:
     image: postgres:13-alpine
     container_name: contas-db
     restart: always
+    networks: 
+      - postgres
     environment:
       - POSTGRES_DB=${CONTAS_DB_NAME}
       - POSTGRES_USER=${CONTAS_DB_USER}
@@ -35,11 +37,46 @@ services:
     container_name: conta-rabbitmq
     restart: always
     hostname: rabbitmq
+    networks: 
+      - rabbit
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
     ports:
       - "15672:15672"
       - "5672:5672"
     volumes:
       - "./.rabbitmq_data:/var/lib/rabbitmq/mnesia"
+
+  contasapp:
+    build: ./contas
+    container_name: contasapp
+    entrypoint: ./.docker/entrypoint.sh
+    command: ["yarn", "dev"]
+    environment:
+      APPCONTAS_PORT: ${APPCONTAS_PORT}
+      CONTAS_DB_NAME: ${CONTAS_DB_NAME}
+      CONTAS_DB_USER: ${CONTAS_DB_USER}
+      CONTAS_DB_PASS: ${CONTAS_DB_PASS}
+      CONTAS_DB_PORT: ${CONTAS_DB_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+    restart: always
+    ports:
+      - 3000:3000
+    links:
+      - db
+    networks: 
+      - postgres
+      - rabbit
+    volumes:
+      - ./contas:/home/node/contas
+    depends_on:
+      - db
+      - rabbitmq
+
+networks:
+  postgres:
+    driver: bridge
+  rabbit:
+    driver: bridge

@@ -3,6 +3,11 @@ import { Router } from 'express'
 
 const routes = Router()
 
+routes.get('/', (req,res,next)=> {
+    res.send('Contas OK')
+    next()
+})
+
 routes.get('/contas',ContasController.index)
 routes.post('/contas',ContasController.criar)
 routes.put('/contas/:id/deposito',ContasController.depositar)

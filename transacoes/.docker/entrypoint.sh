@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/node/contas
+cd /home/node/transacoes
 
 yarn
 yarn cache clean

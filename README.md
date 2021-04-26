@@ -52,6 +52,24 @@ http://localhost:3000
 http://localhost:3001
 ```
 
+
+### Rodando testes com Jest
+
+Após ter todos os containers rodando, é possível executar os testes através do da linha de comando com os seguintes comandos:
+
+
+##### Testes de "transacoesapp":
+
+```sh
+docker container exec -it transacoesapp yarn test
+```
+##### Testes de "contasapp":
+
+```sh
+docker container exec -it contasapp yarn test
+```
+
+
 ## Documentação
 
 Para acessar a documentação criada via [Swagger](https://swagger.io/) é necessário iniciar a aplicação pela seção anterior e acessar os endereços: 

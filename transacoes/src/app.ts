@@ -28,12 +28,12 @@ class App{
   }
 
   private async docsSetup(): Promise<void> {
-    this.express.use('/docs', swaggerUi.serve, swaggerUi.setup(schema));
+    this.express.use('/docs', swaggerUi.serve, swaggerUi.setup(schema))
     await new OpenApiValidator({
       apiSpec: schema as OpenAPIV3.Document,
       validateRequests: true, //we do it
       validateResponses: true,
-    }).install(this.express);
+    }).install(this.express)
   }
 
 }

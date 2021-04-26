@@ -6,6 +6,12 @@ services:
     image: postgres:13-alpine
     container_name: contasdb
     restart: always
+    volumes: 
+      #Volume de dados
+      - ./dados:/var/lib/postgres/data
+      #Scripts
+      - ./contas/.scripts:/scripts
+      - ./contas/.scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks: 
       - backendcontas
     environment:

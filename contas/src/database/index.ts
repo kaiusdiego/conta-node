@@ -1,3 +1,4 @@
+import Pessoa from "src/entities/pessoa";
 import { ConnectionOptions } from "typeorm";
 import Conta from "../entities/conta";
 
@@ -8,7 +9,7 @@ const dbConfig: ConnectionOptions = {
   username: process.env.CONTAS_DB_USER,
   password: process.env.CONTAS_DB_PASS,
   database: process.env.CONTAS_DB_NAME,
-  entities: [ Conta ],
+  entities: [ Conta, Pessoa ],
   synchronize: true,
 };
 

@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn} from "typeorm";
+import Pessoa from "./pessoa";
 
-@Entity()
+@Entity('contas')
 export default class Conta {
 
     @PrimaryGeneratedColumn("increment")
@@ -34,5 +35,9 @@ export default class Conta {
     
     @CreateDateColumn({ name: 'dataCriacao', type: 'timestamp with time zone' })
     dataCriacao: Date
+
+    @OneToOne(() => Pessoa, pessoa => pessoa.idPessoa)
+    @JoinColumn({name: 'idPessoa',referencedColumnName: 'idPessoa'})
+    pessoa: Pessoa;
 
 }

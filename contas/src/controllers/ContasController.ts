@@ -74,6 +74,12 @@ class ContasController  {
 
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
+
+      const contaEncontrada = await obterConta(Number.parseInt(req.params.id))
+      if(!contaEncontrada.flagAtivo){
+        throw new Error('Conta bloqueada.');
+      }
+
       const conta =  await depositarValor(idConta,valor)
       await server.rKeyPublish('contas','deposito.transacao',
       JSON.stringify({idConta,valor, dataTransacao: new Date()}))
@@ -101,6 +107,12 @@ class ContasController  {
 
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
+      const contaEncontrada = await obterConta(Number.parseInt(req.params.id))
+      
+      if(!contaEncontrada.flagAtivo){
+        throw new Error('Conta bloqueada.');
+      }
+
       const saldo = await obterSaldo(idConta)
       if (valor > saldo) {
         throw new Error('Saldo insuficiente.');

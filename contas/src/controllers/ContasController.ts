@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import request from "supertest";
 import  IConta  from "../models/IConta"
 import { config } from "dotenv"; 
-import { criarConta, obterSaldo, bloquearConta, obterTodas, depositarValor, sacarValor } from "../database/repositories/contaRepository";
+import { criarConta, obterSaldo, bloquearConta, obterTodas, depositarValor, sacarValor, obterConta } from "../database/repositories/contaRepository";
 import RabbitmqServer from 'src/RabbitmqServer';
 
 class ContasController  {

@@ -102,9 +102,9 @@ class ContasController  {
       const server = new RabbitmqServer()
       await server.init()
       await server.declareExchange('contas')
-      await server.declareQueue('limitediario')
+      await server.declareQueue('saque')
       await server.declareQueue('saqueliberado')
-      await server.bindQueueExchange('limitediario','contas','limitediario.transacao')
+      await server.bindQueueExchange('saque','contas','saque.transacao')
 
       const valor = <number>req.body?.valor
       const idConta = Number.parseInt(req.params?.id)
@@ -114,12 +114,12 @@ class ContasController  {
         throw new Error('Conta bloqueada.')
       }
 
-      await server.rKeyPublish('contas','limitediario.transacao',
-      JSON.stringify(
-        {idConta, limite: contaEncontrada.limiteSaqueDiario, 
-         valor, dataTransacao: new Date() }))
+      await server.rKeyPublish('contas','saque.transacao',
+      JSON.stringify({idConta, limite: contaEncontrada.limiteSaqueDiario,
+        valor, dataTransacao: new Date()}))
 
       let limiteAtingido = false
+
       await server.consume('saqueliberado', async (msg) => {
         const res = JSON.parse(msg.content.toString())
         if(!res['saqueLiberado']){
@@ -131,7 +131,6 @@ class ContasController  {
         throw new Error('Limite de saque atingido.')
       }
 
-      await server.declareQueue('saque')
       await server.bindQueueExchange('saque','contas','saque.transacao')
 
       const saldo = await obterSaldo(idConta)
@@ -139,8 +138,7 @@ class ContasController  {
         throw new Error('Saldo insuficiente.')
       }
       const conta =  await sacarValor(idConta,valor)
-      await server.rKeyPublish('contas','saque.transacao',
-      JSON.stringify({idConta,valor, dataTransacao: new Date()}))
+     
       return res.json(conta)
     } catch (error) {
       let result = {

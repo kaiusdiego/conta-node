@@ -14,43 +14,59 @@ export default class Consumer {
             const res = await depositarValor(deposito)
         })
         await rabbit.consume('saque', async (msg) =>{
+            
+            await rabbit.declareExchange('contas')
+            await rabbit.declareQueue('saqueliberado')
+            await rabbit.bindQueueExchange('saqueliberado','contas','saqueliberado.transacao')
+
             const saque = <ITransacao>JSON.parse(msg.content.toString())
-            const res = await sacarValor(saque)
-        })
-        await rabbit.consume('limitediario', async (msg) =>{
-            const conta = JSON.parse(msg.content.toString())
+            const conta = saque
             
             let dtAux = new Date(conta.dataTransacao)
             dtAux.setDate(dtAux.getDate() + 1)
             let dtInicial = new Date(conta.dataTransacao).toISOString().split('T')[0]
             let dtFinal = new Date(dtAux).toISOString().split('T')[0]
 
-            const res =  await obterSaques(conta.idConta,dtInicial,dtFinal)
-            let transacoes = Object.assign({}, res)
+            try {
+                const saques =  await obterSaques(conta.idConta,dtInicial,dtFinal)
+                let transacoes = Object.assign({}, saques)
 
-            let saqueDiario =  Object.keys(transacoes).reduce(function (ob, k) {
-                if(transacoes[k].valor < 0){
-                    ob.valor += new Decimal(transacoes[k].valor).toNumber()
+                let saqueDiario =  Object.keys(transacoes).reduce(function (ob, k) {
+                    if(transacoes[k].valor < 0){
+                        ob.valor += new Decimal(transacoes[k].valor).toNumber()
+                    }
+                    return ob
+                }, { valor: 0 })
+
+                let saqueLiberado = true
+
+                if(saqueDiario.valor != 0 ){                    
+                    let saqueTotal = new Decimal(saqueDiario.valor).abs().plus(conta.valor).abs().toNumber()
+
+                    if( saqueTotal > new Decimal(conta.limite).toNumber()){
+                        saqueLiberado = false
+                        throw new Error(`Tentativa excede o limite de :${conta.limite}`);
+                    }
                 }
-                return ob
-            }, { valor: 0 })
-
-            let saqueLiberado = true
-
-            if(saqueDiario.valor != 0 && res.length !=0 ){
-                let saqueTotal = new Decimal(saqueDiario.valor).abs().plus(conta.valor).abs().toNumber()
                 
-                if( saqueTotal > new Decimal(conta.limite).toNumber()){
-                    saqueLiberado = false
-                    console.log('saque bloqueado por limite de :',conta.limite)
-                }
-            }
+                await rabbit.rKeyPublish('contas','saqueliberado.transacao',
+                JSON.stringify({saqueLiberado , data: new Date() }))
 
-            await rabbit.declareExchange('contas')
-            await rabbit.declareQueue('saqueliberado')
-            await rabbit.bindQueueExchange('saqueliberado','contas','saqueliberado.transacao')
-            await rabbit.rKeyPublish('contas','saqueliberado.transacao',
-            JSON.stringify({saqueLiberado , data: new Date() }))
+                if(!saqueLiberado){
+                    throw new Error('Limite de saque atingido.')
+                }
+                await sacarValor(saque)
+            } catch (error) {
+
+                let result = {
+                    message: error.toString(),
+                    code: 400,
+                    error: "Não foi possível sacar valor."
+                  }
+                console.log(result)
+                await rabbit.rKeyPublish('contas','saqueliberado.transacao',
+                JSON.stringify({saqueLiberado: false , data: new Date() }))
+            }
         })
     }
 }

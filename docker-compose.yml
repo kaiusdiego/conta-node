@@ -61,7 +61,6 @@ services:
   contasapp:
     build: ./contas
     container_name: contasapp
-    entrypoint: ./.docker/entrypoint.sh
     command: ["yarn", "dev"]
     environment:
       APPCONTAS_PORT: ${APPCONTAS_PORT}
@@ -89,7 +88,6 @@ services:
   transacoesapp:
     build: ./transacoes
     container_name: transacoesapp
-    entrypoint: ./.docker/entrypoint.sh
     command: ["yarn", "dev"]
     environment:
       APPTRANSACAO_PORT: ${APPTRANSACAO_PORT}

@@ -8,10 +8,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: cd contas
-      - run: npm install
-      - run: npm test
-      - run: cd ../transacoes
-      - run: npm install
-      - run: npm test
+      - run: cd contas && npm install && npm test
+      # - run: npm install
+      # - run: npm test
+      # - run: cd ../transacoes
+      # - run: npm install
+      # - run: npm test
       
